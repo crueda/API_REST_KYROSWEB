@@ -99,7 +99,7 @@ trackingModel.updateTracking = function(trackingData, callback)
 
 }
 
-//añadir una nuevo vertice
+//añadir una nuevo tracking
 trackingModel.insertVertex = function(vertexData,callback){
     var coordenadas = kcoords(vertexData.latitude, vertexData.longitude);
     var lat = coordenadas.substring(0, coordenadas.indexOf(','));
