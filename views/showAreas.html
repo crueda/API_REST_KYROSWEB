@@ -1,0 +1,51 @@
+<% include partials/header %>
+	<% if (areas.length) { %>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Description</th>
+				<th>InitDate</th>
+				<th>EndDate</th>
+				<th>InitHour</th>
+				<th>EndHour</th>
+				<th>Type</th>
+				<th>Radius</th>
+				<th>Username</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <% areas.forEach(function(area) { %>
+			    <tr>
+					<td><%= area.id %></td>
+					<td><%= area.description %></td>
+					<td><%= area.initDate %></td>
+					<td><%= area.endDate %></td>
+					<td><%= area.initHour %></td>
+					<td><%= area.endHour %></td>
+					<td><%= area.typeArea %></td>
+					<td><%= area.radius %></td>
+					<td><%= area.username %></td>
+					<td><a href="/webkyrosapi/area/<%=area.id%>" class="btn btn-success">
+							<span class="glyphicon glyphicon-edit"></span> Edit
+						</a>
+					</td>
+					<td>
+						<form method="POST" action="/webkyrosapi/area">
+							<input type="hidden" name="_method" value="DELETE">
+		                    <input type="hidden" name="id" value="<%= area.id %>">
+	                        <button type="submit" class="btn btn-danger preview-add-button">
+	                            <span class="glyphicon glyphicon-plus"></span> Delete
+	                        </button>
+						</form>
+					</td>
+				</tr>
+			<% }); %>
+		</tbody>
+	</table>
+	<% }else{ %>
+		<div class="alert alert-danger">Actualmente no hay areas</div>
+	<% } %>
+<% include partials/footer %>

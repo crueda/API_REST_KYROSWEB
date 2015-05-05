@@ -1,0 +1,45 @@
+<% include partials/header %>
+	<% if (vertexes.length) { %>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>AreaId</th>
+				<th>Description</th>
+				<th>NumVertex</th>
+				<th>Latitude</th>
+				<th>Longitude</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <% vertexes.forEach(function(vertex) { %>
+			    <tr>
+					<td><%= vertex.id %></td>
+					<td><%= vertex.areaId %></td>
+					<td><%= vertex.description %></td>
+					<td><%= vertex.numVertex %></td>
+					<td><%= vertex.latitude %></td>
+					<td><%= vertex.longitude %></td>
+					<td><a href="/webkyrosapi/vertex/<%=vertex.id%>" class="btn btn-success">
+							<span class="glyphicon glyphicon-edit"></span> Edit
+						</a>
+					</td>
+					<td>
+						<form method="POST" action="/webkyrosapi/vertex">
+							<input type="hidden" name="_method" value="DELETE">
+		                    <input type="hidden" name="id" value="<%= vertex.id %>">
+	                        <button type="submit" class="btn btn-danger preview-add-button">
+	                            <span class="glyphicon glyphicon-plus"></span> Delete
+	                        </button>
+						</form>
+					</td>
+				</tr>
+			<% }); %>
+		</tbody>
+	</table>
+	<% }else{ %>
+		<div class="alert alert-danger">Actualmente no hay vertices</div>
+	<% } %>
+<% include partials/footer %>
