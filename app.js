@@ -8,9 +8,10 @@ var session		=	require('express-session');
 
 //var tracking = require('./routes/tracking');
 var trackingWeb = require('./routes/trackingWeb');
+var areaWeb = require('./routes/areaWeb');
+var vertexWeb = require('./routes/vertexWeb');
 
-//necesario para utilizar los verbos put y delete en formularios
-var methodOverride = require('method-override');
+
 
 var app = express();
 
@@ -18,19 +19,46 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.engine("html", require("ejs").renderFile);
 app.set('view engine', 'html');
-
+ 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+//app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//necesario para utilizar los verbos put y delete en formularios
+var methodOverride = require('method-override');
+app.use(methodOverride(function(req, res){
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method
+    delete req.body._method
+    return method
+  }
+}));
+app.all('/*', function(req, res, next) {
+  // CORS headers
+  res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // Set custom headers for CORS
+  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+  if (req.method == 'OPTIONS') {
+    res.status(200).end();
+  } else {
+    next();
+  }
+});
 
 
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname, 'apidoc')));
+app.use(express.static(path.join(__dirname, 'apidoc')));
+
+/*
+
+
 
 var sess;
 
@@ -81,8 +109,12 @@ app.get('/logout',function(req,res){
 });
 
 
+*/
+
 //app.use('/kyrosapi', tracking);
 app.use('/webkyrosapi', trackingWeb);
+app.use('/webkyrosapi', areaWeb);
+app.use('/webkyrosapi', vertexWeb);
 
 
 

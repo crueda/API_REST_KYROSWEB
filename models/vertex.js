@@ -1,12 +1,20 @@
+var PropertiesReader = require('properties-reader');
+var properties = PropertiesReader('./api.properties');
+
+// Definición del log
+var fs = require('fs');
+var Log = require('log');
+var log = new Log('debug', fs.createWriteStream(properties.get('main.log.file')));
+
 var mysql = require('mysql'),
 
 // Crear la conexion a la base de datos
 connection = mysql.createConnection(
     {
-        host: '192.168.3.31',
-        user: 'root',
-        password: 'dat1234',
-        database: 'sumo'
+      host: properties.get('bbdd.mysql.ip') ,
+      user: properties.get('bbdd.mysql.user') ,
+      password: properties.get('bbdd.mysql.passwd') ,
+      database: properties.get('bbdd.mysql.name')
     }
 );
 
@@ -29,11 +37,13 @@ function kcoords(px, py) {
 }
 
 // Obtener todos las vertices
-vertexModel.getVertexes = function(callback) {
-    if (connection) {
+vertexModel.getVertexes = function(callback)
+{
+    if (connection)
+    {
         connection.query('SELECT ID as id, AREA_ID as areaId, DESCRIPTION as description, NUM_VERTEX as numVertex, (POS_LATITUDE_DEGREE + POS_LATITUDE_MIN/60) as latitude, (POS_LONGITUDE_DEGREE + POS_LONGITUDE_MIN/60) as longitude FROM VERTEX ORDER BY id', function(error, rows) {
             if(error) {
-                callback(null, null);
+                callback(error, null);
             } else {
                 callback(null, rows);
             }
@@ -44,14 +54,22 @@ vertexModel.getVertexes = function(callback) {
 }
 
 // Obtener un vertice por su id
-vertexModel.getVertex = function(id,callback) {
-    if (connection) {
+vertexModel.getVertex = function(id,callback)
+{
+    if (connection)
+    {
         var sql = 'SELECT ID as id, DESCRIPTION as description, AREA_ID as areaId, NUM_VERTEX as numVertex, (POS_LATITUDE_DEGREE + POS_LATITUDE_MIN/60) as latitude, (POS_LONGITUDE_DEGREE + POS_LONGITUDE_MIN/60) as longitude FROM VERTEX WHERE id = ' + connection.escape(id);
+
+        log.debug ("Query: "+sql);
+
         connection.query(sql, function(error, row)
         {
-            if(error) {
-                callback(null, null);
-            } else{
+            if(error)
+            {
+                callback(error, null);
+            }
+            else
+            {
                 callback(null, row);
             }
         });
@@ -71,20 +89,27 @@ vertexModel.updateVertex = function(vertexData, callback)
     var londeg = lon.substring(0, lon.indexOf('|'));
     var lonmin = lon.substring(lon.indexOf('|')+1, lon.length);
 
-    if(connection) {
-        var sql = 'UPDATE VERTEX SET DESCRIPTION = ' + connection.escape(areaData.description) + ',' +
-        'AREA_ID = ' + connection.escape(areaData.areaId) + ',' +
-        'NUM_VERTEX = ' + connection.escape(areaData.numVertex) + ',' +
+    if(connection)
+    {
+        var sql = 'UPDATE VERTEX SET DESCRIPTION = ' + connection.escape(vertexData.description) + ',' +
+        'AREA_ID = ' + connection.escape(vertexData.areaId) + ',' +
+        'NUM_VERTEX = ' + connection.escape(vertexData.numVertex) + ',' +
         'POS_LATITUDE_DEGREE = ' + latdeg + ',' +
         'POS_LATITUDE_MIN = ' + latmin + ',' +
         'POS_LONGITUDE_DEGREE = ' + londeg + ',' +
         'POS_LONGITUDE_MIN = ' + londeg + ' ' +
         'WHERE id = ' + vertexData.id;
 
-        connection.query(sql, function(error, result) {
-            if(error) {
-               callback(null, null);
-            } else {
+        log.debug ("Query: "+sql);
+
+        connection.query(sql, function(error, result)
+        {
+            if(error)
+            {
+               callback(error, null);
+            }
+            else
+            {
                 callback(null,{"message":"success"});
             }
         });
@@ -95,7 +120,8 @@ vertexModel.updateVertex = function(vertexData, callback)
 }
 
 //añadir una nuevo vertice
-vertexModel.insertVertex = function(vertexData,callback){
+vertexModel.insertVertex = function(vertexData,callback)
+{
     var coordenadas = kcoords(vertexData.latitude, vertexData.longitude);
     var lat = coordenadas.substring(0, coordenadas.indexOf(','));
     var lon = coordenadas.substring(coordenadas.indexOf(',')+1, coordenadas.length);
@@ -104,7 +130,8 @@ vertexModel.insertVertex = function(vertexData,callback){
     var londeg = lon.substring(0, lon.indexOf('|'));
     var lonmin = lon.substring(lon.indexOf('|')+1, lon.length);
 
-    if (connection) {
+    if (connection)
+    {
         var sql = 'INSERT INTO VERTEX SET DESCRIPTION = ' + connection.escape(vertexData.description) + ',' +
         'AREA_ID = ' + connection.escape(vertexData.areaId) + ',' +
         'NUM_VERTEX = ' + connection.escape(vertexData.numVertex) + ',' +
@@ -113,11 +140,16 @@ vertexModel.insertVertex = function(vertexData,callback){
         'POS_LONGITUDE_DEGREE = ' + londeg + ',' +
         'POS_LONGITUDE_MIN = ' + lonmin;
 
-        connection.query(sql, function(error, result) {
-            if(error) {
-               callback(null, null);
+        log.debug ("Query: "+sql);
+
+        connection.query(sql, function(error, result)
+        {
+            if(error)
+            {
+               callback(error, null);
             }
-            else {
+            else
+            {
                 //devolvemos la última id insertada
                 callback(null,{"insertId" : result.insertId});
             }
@@ -129,17 +161,30 @@ vertexModel.insertVertex = function(vertexData,callback){
 }
 
 // Eliminar un vertice pasando la id a eliminar
-vertexModel.deleteVertex = function(id, callback) {
-    if(connection) {
+vertexModel.deleteVertex = function(id, callback)
+{
+    if(connection)
+    {
         var sqlExists = 'SELECT * FROM VERTEX WHERE id = ' + connection.escape(id);
+
+        log.debug ("Query: "+sqlExists);
+
         connection.query(sqlExists, function(err, row) {
             //si existe la id del vertice a eliminar
-            if(row) {
+            if(row)
+            {
                 var sql = 'DELETE FROM VERTEX WHERE id = ' + connection.escape(id);
-                connection.query(sql, function(error, result) {
-                    if(error) {
-                      callback(null, null);
-                    } else {
+
+                log.debug ("Query: "+sql);
+
+                connection.query(sql, function(error, result)
+                {
+                    if(error)
+                    {
+                      callback(error, null);
+                    }
+                    else
+                    {
                         callback(null,{"message":"deleted"});
                     }
                 });
