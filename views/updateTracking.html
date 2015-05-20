@@ -1,0 +1,103 @@
+<% include partials/header %>
+	<form method="POST" action="/webkyrosapi/tracking/">
+    	<div class="col-sm-6 col-md-offset-3">
+            <h4>Update tracking:</h4>
+            <div class="panel panel-default">
+                <div class="panel-body form-horizontal payment-form">
+
+									<div class="form-group">
+                        <label for="vehicleLicense" class="col-sm-3 control-label">Vehicle License</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="vehicleLicense" name="vehicleLicense"
+                            value="<%=info[0].vehicleLicense%>">
+                        </div>
+                    </div>
+
+										<div class="form-group">
+	                        <label for="deviceId" class="col-sm-3 control-label">Device ID</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" id="deviceId" name="deviceId"
+	                            value="<%=info[0].deviceId%>">
+	                        </div>
+	                    </div>
+
+                    <div class="form-group">
+                        <label for="alertFlag" class="col-sm-3 control-label">Alert Flag</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="alertFlag" name="alertFlag"
+                            value="<%=info[0].alertFlag%>">
+                        </div>
+                    </div>
+
+										<div class="form-group">
+                        <label for="alertDescription" class="col-sm-3 control-label">Alert Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="alertDescription" name="alertDescription"
+                            value="<%=info[0].alertDescription%>">
+                        </div>
+                    </div>
+
+										<div class="form-group">
+                        <label for="altitude" class="col-sm-3 control-label">Altitude</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="altitude" name="altitude"
+                            value="<%=info[0].altitude%>">
+                        </div>
+                    </div>
+
+										<div class="form-group">
+                        <label for="speed" class="col-sm-3 control-label">Speed</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="speed" name="speed"
+                            value="<%=info[0].speed%>">
+                        </div>
+                    </div>
+
+										<div class="form-group">
+                        <label for="heading" class="col-sm-3 control-label">Heading</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="heading" name="heading"
+                            value="<%=info[0].heading%>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="posDate" class="col-sm-3 control-label">Date</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="posDate" name="posDate"
+                            value="<%=info[0].posDate%>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="latitude" class="col-sm-3 control-label">Latitude</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="latitude" name="latitude"
+                            value="<%=info[0].latitude%>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="longitude" class="col-sm-3 control-label">Longitude</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="longitude" name="longitude"
+                            value="<%=info[0].longitude%>">
+                        </div>
+                    </div>
+
+                    <!--campo oculto para decirle a express que es una petición put-->
+                    <input type="hidden" name="_method" value="PUT">
+                    <!--campo oculto con el id del tracking-->
+                    <input type="hidden" name="id" value="<%=info[0].id%>">
+                    <div class="form-group">
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-primary preview-edit-button">
+                                <span class="glyphicon glyphicon-edit"></span> Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- / panel preview -->
+    </form>
+<% include partials/footer %>

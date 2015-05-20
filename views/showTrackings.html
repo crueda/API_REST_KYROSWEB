@@ -1,0 +1,59 @@
+<% include partials/header %>
+	<% if (trackings.length) { %>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Tracking id</th>
+				<th>Vehicle license</th>
+				<th>Device id</th>
+				<th>Alert flag</th>
+				<th>Alert description</th>
+				<th>Altitude</th>
+				<th>Speed</th>
+				<th>Heading</th>
+				<th>Date</th>
+				<th>Latitude</th>
+				<th>Longitude</th>
+				<th>Map</th>
+				<th>Edit</th>
+				<th>Delete</th>
+
+			</tr>
+		</thead>
+		<tbody>
+		    <% trackings.forEach(function(tracking) { %>
+			    <tr>
+					<td><%= tracking.id %></td>
+					<td><%= tracking.vehiceLicense %></td>
+					<td><%= tracking.deviceId %></td>
+					<td><%= tracking.alertFlag %></td>
+					<td><%= tracking.alertDescription %></td>
+					<td><%= tracking.altitude %></td>
+					<td><%= tracking.speed %></td>
+					<td><%= tracking.heading %></td>
+					<td><%= tracking.posDate %></td>
+					<td><%= tracking.latitude %></td>
+					<td><%= tracking.longitude %></td>
+					<td><a href="https://www.google.es/maps/@<%= tracking.latitude %>,<%= tracking.longitude %>,13z">mapa</a></td>
+
+					<td><a href="/webkyrosapi/tracking/<%=tracking.id%>" class="btn btn-success">
+							<span class="glyphicon glyphicon-edit"></span> Edit
+						</a>
+					</td>
+					<td>
+						<form method="POST" action="/webkyrosapi/tracking">
+							<input type="hidden" name="_method" value="DELETE">
+		                    <input type="hidden" name="id" value="<%= tracking.id %>">
+	                        <button type="submit" class="btn btn-danger preview-add-button">
+	                            <span class="glyphicon glyphicon-plus"></span> Delete
+	                        </button>
+						</form>
+					</td>
+				</tr>
+			<% }); %>
+		</tbody>
+	</table>
+	<% }else{ %>
+		<div class="alert alert-danger">Actualmente no hay trackings</div>
+	<% } %>
+<% include partials/footer %>
