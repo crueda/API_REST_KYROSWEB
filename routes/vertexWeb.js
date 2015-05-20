@@ -19,7 +19,18 @@ router.get('/', function(req, res)
 // Obtener todos los vertices
 router.get('/vertexes/', function(req, res)
 {
-    log.info ("Procesando GET de vertexes");
+    sess=req.session;
+    if(sess.username)
+    {
+        log.info ("Procesando GET de vertexes");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
 
     VertexModel.getVertexes(function(error, data)
     {
@@ -52,6 +63,18 @@ router.get('/vertexes/', function(req, res)
 /* Obtenemos un vertice por su id y lo mostramos en un formulario para editar */
 router.get('/vertex/:id', function(req, res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+        log.info ("Procesando GET de vertex");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     var id = req.params.id;
     //solo actualizamos si la id es un número
     if(!isNaN(id))
@@ -97,6 +120,18 @@ router.get('/vertex/:id', function(req, res)
 /* Actualizamos un vertice existente */
 router.put('/vertex/', function(req, res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+        log.info ("Procesando PUT de vertex");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     //almacenamos los datos del formulario en un objeto
     var vertexData = {id:req.param('id'),description:req.param('description'),areaId:req.param('areaId'),numVertex:req.param('numVertex'),latitude:req.param('latitude'),longitude:req.param('longitude')};
     VertexModel.updateVertex(vertexData,function(error, data)
@@ -139,6 +174,18 @@ router.get('/newvertex/', function(req, res)
 /* Crear un nuevo vertice */
 router.post("/vertex", function(req,res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+        log.info ("Procesando POST de vertex");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     // Crear un objeto con los datos a insertar del vertice
     var vertexData = {
         id : null,
@@ -177,6 +224,18 @@ router.post("/vertex", function(req,res)
 /* Eliminar un vertice */
 router.delete("/vertex/", function(req, res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+        log.info ("Procesando DELETE de vertex");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     // id del vertice a eliminar
     var id = req.param('id');
 

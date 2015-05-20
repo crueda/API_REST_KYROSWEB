@@ -2,15 +2,30 @@ var express = require('express');
 var router = express.Router();
 var AreaModel = require('../models/area');
 
-router.get('/', function(req, res)
-{
-  res.render('index', { title: ' Kyros API REST'});
-});
+// Fichero de propiedades
+var PropertiesReader = require('properties-reader');
+var properties = PropertiesReader('./api.properties');
 
+// Definición del log
+var fs = require('fs');
+var Log = require('log');
+var log = new Log('debug', fs.createWriteStream(properties.get('main.log.file')));
 
 /* Creamos un nuevo area */
 router.post("/area", function(req,res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+      log.info ("Procesando POST de area");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     //creamos un objeto con los datos a insertar del area
     var areaData = {
         id : null,
@@ -55,6 +70,18 @@ router.post("/area", function(req,res)
 /* Actualizamos un area existente */
 router.put('/area/', function(req, res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+      log.info ("Procesando PUT de area");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     // Almacenar los datos del formulario en un objeto
     var areaData = {id:req.param('id'),description:req.param('description'),typeArea:req.param('typeArea'),initDate:req.param('initDate'),endDate:req.param('endDate'),initHour:req.param('initHour'),endHour:req.param('endHour'),radius:req.param('radius')};
     AreaModel.updateArea(areaData,function(error, data)
@@ -99,6 +126,18 @@ router.get('/newarea/', function(req, res)
 /* Obtenemos un area por su id y lo mostramos en un formulario para editar */
 router.get('/area/:id', function(req, res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+      log.info ("Procesando GET de area");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     var id = req.params.id;
     //solo actualizamos si la id es un número
     if(!isNaN(id))
@@ -145,6 +184,18 @@ router.get('/area/:id', function(req, res)
 /* Obtenemos y mostramos todos las areas */
 router.get('/areas/', function(req, res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+      log.info ("Procesando GET de areas");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     AreaModel.getAreas(function(error, data)
     {
         if (data == null) {
@@ -177,6 +228,18 @@ router.get('/areas/', function(req, res)
 /* Eliminar un area */
 router.delete("/area/", function(req, res)
 {
+    sess=req.session;
+    if(sess.username)
+    {
+      log.info ("Procesando DELETE de area");
+    }
+    else {
+      res.render("errorAPI",{
+          title : "Kyros API REST",
+          message : "Please, login first"
+      });
+    }
+
     //id del area a eliminar
     var id = req.param('id');
 
