@@ -6,10 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session		=	require('express-session');
 
-var areas = require('./routes/areas');
-var areasWeb = require('./routes/areasWeb');
-var vertex = require('./routes/vertex');
-var vertexWeb = require('./routes/vertexWeb');
+//var tracking = require('./routes/tracking');
 var trackingWeb = require('./routes/trackingWeb');
 
 //necesario para utilizar los verbos put y delete en formularios
@@ -84,8 +81,8 @@ app.get('/logout',function(req,res){
 });
 
 
-app.use('/webkyrosapi', areasWeb);
-app.use('/webkyrosapi', vertexWeb);
+//app.use('/kyrosapi', tracking);
+app.use('/webkyrosapi', trackingWeb);
 
 
 
