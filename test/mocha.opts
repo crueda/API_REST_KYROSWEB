@@ -1,0 +1,9 @@
+./test/others/test_aisMessage.js
+
+--reporter spec
+--growl
+--colors
+--timeout 1500
+--slow 100
+--sort
+--full-trace
