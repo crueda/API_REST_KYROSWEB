@@ -6,7 +6,7 @@ var winston = require('winston');
 var trackingInserted = 0;
 
 describe('Tracking', function() {
-  var url = 'http://localhost:3001';
+  var url = 'http://localhost:3000';
   before(function(done) {
     done();
   });

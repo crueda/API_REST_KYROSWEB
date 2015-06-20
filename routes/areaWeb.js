@@ -8,8 +8,17 @@ var properties = PropertiesReader('./api.properties');
 
 // Definición del log
 var fs = require('fs');
-var Log = require('log');
-var log = new Log('debug', fs.createWriteStream(properties.get('main.log.file')));
+var log = require('tracer').console({
+    transport : function(data) {
+        //console.log(data.output);
+        fs.open(properties.get('main.log.file'), 'a', 0666, function(e, id) {
+            fs.write(id, data.output+"\n", null, 'utf8', function() {
+                fs.close(id, function() {
+                });
+            });
+        });
+    }
+});
 
 /* Creamos un nuevo area */
 router.post("/area", function(req,res)

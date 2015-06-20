@@ -9,9 +9,19 @@ var crypto = require('crypto');
 var PropertiesReader = require('properties-reader');
 var properties = PropertiesReader('./api.properties');
 
-var Log = require('log');
+// Definición del log
 var fs = require('fs');
-var log = new Log('debug', fs.createWriteStream(properties.get('main.log.file')));
+var log = require('tracer').console({
+    transport : function(data) {
+        //console.log(data.output);
+        fs.open(properties.get('main.log.file'), 'a', 0666, function(e, id) {
+            fs.write(id, data.output+"\n", null, 'utf8', function() {
+                fs.close(id, function() {
+                });
+            });
+        });
+    }
+});
 
 /**
  * @api {post} /login/ Login to Kyros API platform
@@ -44,8 +54,8 @@ var log = new Log('debug', fs.createWriteStream(properties.get('main.log.file'))
  */
   router.post("/login", function(req,res)
   {
-    var username = req.query.username || '';
-    var password = req.query.password || '';
+    var username = req.query.username || req.params.username || req.body.username || '';
+    var password = req.query.password || req.params.username || req.body.username || '';
 
     log.info('Peticion de login. username:'+username + ' - password:'+password);
 
@@ -64,7 +74,7 @@ var log = new Log('debug', fs.createWriteStream(properties.get('main.log.file'))
     }
 
    // Authorize the user to see if s/he can access our resources
-   var userData = {username:req.query.username};
+   var userData = {username:username};
 
    //var dbUserObj =
    var passwordDB = '';

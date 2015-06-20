@@ -3,7 +3,7 @@
 --reporter spec
 --growl
 --colors
---timeout 1500
+--timeout 4500
 --slow 100
 --sort
 --full-trace

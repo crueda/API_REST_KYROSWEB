@@ -8,10 +8,17 @@ var properties = PropertiesReader('./api.properties');
 
 // Definición del log
 var fs = require('fs');
-var Log = require('log');
-var log = new Log('debug', fs.createWriteStream(properties.get('main.log.file')));
-
-
+var log = require('tracer').console({
+    transport : function(data) {
+        //console.log(data.output);
+        fs.open(properties.get('main.log.file'), 'a', 0666, function(e, id) {
+            fs.write(id, data.output+"\n", null, 'utf8', function() {
+                fs.close(id, function() {
+                });
+            });
+        });
+    }
+});
 
 /* POST. Obtenemos y mostramos todos los tracking_1 */
 /**
@@ -171,12 +178,12 @@ router.post('/trackings/', function(req, res)
         //si existen vertices, se envia el json
         if (typeof data !== 'undefined')
         {
-            res.json(200,{"results":data})
+            res.status(200).json({"results":data})
         }
         //en otro caso se muestra un error
         else
         {
-            res.json(404,{"message":"notExist"});
+            res.status(400).json({"message":"notExist"})
         }
     });
 });
@@ -439,9 +446,7 @@ router.post("/tracking", function(req,res)
 /* Eliminar un tracking */
 router.delete("/tracking/", function(req, res)
 {
-
     log.info ("Procesando DELETE de tracking");
-
 
     // id del tracking a eliminar
     var id = req.param('id');
