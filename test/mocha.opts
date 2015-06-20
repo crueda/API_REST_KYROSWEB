@@ -1,4 +1,4 @@
-./test/others/test_aisMessage.js
+./test/test_tracking.js
 
 --reporter spec
 --growl

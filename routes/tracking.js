@@ -164,8 +164,7 @@ router.post('/trackings5/', function(req, res)
  */
 router.post('/trackings/', function(req, res)
 {
-
-      log.info ("Procesando GET de trackings");
+    log.info ("Procesando GET de trackings");
 
     TrackingModel.getTrackings(function(error, data)
     {
@@ -272,10 +271,10 @@ router.get('/tracking/:id', function(req, res)
 
 /* PUT. Actualizamos un tracking existente */
 /**
- * @api {put} /vertex/ Update tracking
+ * @api {put} /tracking/ Update tracking
  * @apiName PutNewTracking
  * @apiGroup Tracking
- * @apiDescription Update vertex
+ * @apiDescription Update tracking
  * @apiSampleRequest http://api.kyroslbs.com:3000/kyrosapi/tracking
  * @apiHeader {String} x-access-token JSON Web Token (JWT)
  * @apiHeaderExample {json} Header-Example:
@@ -362,15 +361,15 @@ router.put('/tracking/', function(req, res)
  *     }
  *
  * @apiParam {String} deviceId Vehicle unique identification
- * @apiParam {String} vehicleLicense Vehicle license
- * @apiParam {String} alertFlag Alert flag of tracking
- * @apiParam {String} alertDescription Alert description of tracking
  * @apiParam {Number} posDate Date for the tracking. Milliseconds since january 1 1970 (epoch)
- * @apiParam {Number} speed Speed in km/hour
- * @apiParam {Number} heading Heading in degrees (0-360)
- * @apiParam {Number} altitude Altitude in meters
  * @apiParam {Number} latitude Latitude of the tracking (WGS84)
  * @apiParam {Number} longitude Longitude of the tracking (WGS84)
+ * @apiParam {String} [vehicleLicense] Vehicle license
+ * @apiParam {String} [alertFlag] Alert flag of tracking
+ * @apiParam {String} [alertDescription] Alert description of tracking
+ * @apiParam {Number} [speed=0] Speed in km/hour
+ * @apiParam {Number} [heading=0] Heading in degrees (0-360)
+ * @apiParam {Number} [altitude=0] Altitude in meters
  *
  * @apiSuccess {Number} id Tracking unique ID
  * @apiSuccessExample Success-Response:

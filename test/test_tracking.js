@@ -3,9 +3,9 @@ var assert = require('assert');
 var request = require('supertest');
 var winston = require('winston');
 
-var uxoInserted = 0;
+var trackingInserted = 0;
 
-describe('UXO', function() {
+describe('Tracking', function() {
   var url = 'http://localhost:3001';
   before(function(done) {
     done();
@@ -13,12 +13,9 @@ describe('UXO', function() {
 
   describe('API REST test', function()
 	{
-    it('[POST]    Get all UXOs', function(done) {
-      //this.timeout(500);
-      //setTimeout(done, 300);
-
+    it('[POST]    Get all trackings', function(done) {
     request(url)
-	  .post('/kyrosapi/uxos')
+	  .post('/kyrosapi/trackings')
 
     // end handles the response
 	  .end(function(err, res) {
@@ -30,15 +27,22 @@ describe('UXO', function() {
         });
     });
 
-	it('[POST]    Add UXO', function(done) {
+/*
+	it('[POST]    Add tracking', function(done) {
     var body = {
-      description: 'uxo description',
-      weight: '99',
-      latitude: '40.3',
-      longitude: '-2.1'
+      deviceId: '13',
+      vehicleLicence: '1615-FDW',
+      alertFlag: '0',
+      alertDescription: 'alert description',
+      posDate: '1434781120000',
+      altitude: '700',
+      speed: '100',
+      heading: '120',
+      latitude: '42.3',
+      longitude: '-3.1'
   	};
 	request(url)
-	.post('/kyrosapi/uxo')
+	.post('/kyrosapi/tracking')
 	.send(body)
 	// end handles the response
 	.end(function(err, res) {
@@ -52,9 +56,9 @@ describe('UXO', function() {
 			});
 	});
 
-  it('[POST]    Get UXO', function(done) {
+  it('[POST]    Get tracking', function(done) {
   request(url)
-  .post('/kyrosapi/uxo/'+uxoInserted)
+  .post('/kyrosapi/tracking/'+trackingInserted)
   // end handles the response
   .end(function(err, res) {
         if (err) {
@@ -66,16 +70,22 @@ describe('UXO', function() {
   });
 
 
-  it('[PUT]     Update UXO', function(done){
+  it('[PUT]     Update tracking', function(done){
   var body = {
-  id: uxoInserted,
-  description: 'new description',
-  weight: '10',
-  latitude: '41.3',
+  id: trackingInserted,
+  deviceId: '13',
+  vehicleLicence: '1615-FDW',
+  alertFlag: '0',
+  alertDescription: 'alert description',
+  posDate: '1434781120000',
+  altitude: '700',
+  speed: '100',
+  heading: '120',
+  latitude: '42.3',
   longitude: '-3.1'
   };
   request(url)
-  .put('/kyrosapi/uxo')
+  .put('/kyrosapi/tracking')
   .send(body)
   .expect('Content-Type', /json/)
   .expect(200) //Status code
@@ -88,12 +98,12 @@ describe('UXO', function() {
   });
   });
 
-  it('[DELETE]  Remove UXO', function(done) {
+  it('[DELETE]  Remove tracking', function(done) {
     var body = {
-      id: uxoInserted
+      id: trackingInserted
   	};
 	request(url)
-	.delete('/kyrosapi/uxo')
+	.delete('/kyrosapi/tracking')
 	.send(body)
 	// end handles the response
 	.end(function(err, res) {
@@ -104,6 +114,6 @@ describe('UXO', function() {
 				done();
 			});
 	});
-
+*/
   });
 });

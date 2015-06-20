@@ -61,7 +61,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'apidoc')));
 
 
-
+/*
 var sess;
 
 app.get('/',function(req,res){
@@ -123,7 +123,7 @@ app.get('/logout',function(req,res){
 	});
 
 });
-
+*/
 
 
 // Zona desmilitarizada
@@ -135,7 +135,7 @@ app.use('/webkyrosapi', vertexWeb);
 
 
 // AUTENTICACION TOKEN
-app.all('/*', [require('./middlewares/validateRequest')]);
+//app.all('/*', [require('./middlewares/validateRequest')]);
 
 // Zona protegida
 app.use('/kyrosapi', area);
