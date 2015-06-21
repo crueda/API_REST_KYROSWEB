@@ -20,125 +20,25 @@ var log = require('tracer').console({
     }
 });
 
-/* POST. Obtenemos y mostramos todos los tracking_1 */
-/**
- * @api {post} /trackings1 Request all tracking information
- * @apiName GetTrackings1
- * @apiGroup Tracking
- * @apiDescription List of trackings1
- * @apiSampleRequest http://api.kyroslbs.com:3000/kyrosapi/trackings1
- * @apiHeader {String} x-access-token JSON Web Token (JWT)
- * @apiHeaderExample {json} Header-Example:
- *     {
- *       "x-access-token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0MzIyMTg2ODc1ODksImlzcyI6InN1bW8iLCJyb2xlIjoiYWRtaW5pc3RyYXRvciJ9._tYZLkBrESt9FwOccyvripIsZR5S0m8PLZmEgIDEFaY"
- *     }
- *
- *
- * @apiSuccess {Object[]} tracking       List of tracking1
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 401 Not authorized
- *     {
- *       "message": "Invalid user"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 401 Not authorized
- *     {
- *       "message": "Invalid token"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 401 Not authorized
- *     {
- *       "message": "Token expired"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 404 Not found
- *     {
- *       "message": "notExist"
- *     }
- */
-router.post('/trackings1/', function(req, res)
-{
 
-      log.info ("Procesando GET de trackings1");
-
-
-    TrackingModel.getTrackings1(function(error, data)
-    {
-        //si existen vertices, se envia el json
-        if (typeof data !== 'undefined')
-        {
-            res.json(200,{"results":data})
-        }
-        //en otro caso se muestra un error
-        else
-        {
-            res.json(404,{"message":"notExist"});
-        }
-    });
-});
-
-/* POST. Obtenemos y mostramos todos los tracking_5 */
-/**
- * @api {post} /trackings5 Request all tracking information
- * @apiName GetTrackings5
- * @apiGroup Tracking
- * @apiDescription List of trackings5
- * @apiSampleRequest http://api.kyroslbs.com:3000/kyrosapi/trackings5
- * @apiHeader {String} x-access-token JSON Web Token (JWT)
- * @apiHeaderExample {json} Header-Example:
- *     {
- *       "x-access-token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0MzIyMTg2ODc1ODksImlzcyI6InN1bW8iLCJyb2xlIjoiYWRtaW5pc3RyYXRvciJ9._tYZLkBrESt9FwOccyvripIsZR5S0m8PLZmEgIDEFaY"
- *     }
- *
- *
- * @apiSuccess {Object[]} tracking       List of tracking5
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 401 Not authorized
- *     {
- *       "message": "Invalid user"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 401 Not authorized
- *     {
- *       "message": "Invalid token"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 401 Not authorized
- *     {
- *       "message": "Token expired"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 404 Not found
- *     {
- *       "message": "notExist"
- *     }
- */
-router.post('/trackings5/', function(req, res)
-{
-
-      log.info ("Procesando GET de trackings5");
-
-    TrackingModel.getTrackings5(function(error, data)
-    {
-        //si existen vertices, se envia el json
-        if (typeof data !== 'undefined')
-        {
-            res.json(200,{"results":data})
-        }
-        //en otro caso se muestra un error
-        else
-        {
-            res.json(404,{"message":"notExist"});
-        }
-    });
-});
 
 /* POST. Obtenemos y mostramos todos los tracking */
 /**
  * @api {post} /trackings Request all tracking information
  * @apiName GetTrackings
  * @apiGroup Tracking
+ * @apiVersion 1.0.1
  * @apiDescription List of trackings
+ * @apiParam {String} deviceId Vehicle unique identification
+ * @apiParam {Number} posDate Date for the tracking. Milliseconds since january 1 1970 (epoch)
+ * @apiParam {Number} latitude Latitude of the tracking (WGS84)
+ * @apiParam {Number} longitude Longitude of the tracking (WGS84)
+ * @apiParam {String} [vehicleLicense] Vehicle license
+ * @apiParam {String} [alertFlag] Alert flag of tracking
+ * @apiParam {String} [alertDescription] Alert description of tracking
+ * @apiParam {Number} [speed=0] Speed in km/hour
+ * @apiParam {Number} [heading=0] Heading in degrees (0-360)
+ * @apiParam {Number} [altitude=0] Altitude in meters
  * @apiSampleRequest http://api.kyroslbs.com:3000/kyrosapi/trackings
  * @apiHeader {String} x-access-token JSON Web Token (JWT)
  * @apiHeaderExample {json} Header-Example:
@@ -206,7 +106,7 @@ router.post('/trackings/', function(req, res)
  *
  * @apiParam {Number} trackingId Identification of the tracking
  *
- * @apiPaapiSuccessram {String} deviceId Vehicle unique identification
+ * @apiSuccess {String} deviceId Vehicle unique identification
  * @apiSuccess {String} vehicleLicense Vehicle license
  * @apiSuccess {String} alertFlag Alert flag of tracking
  * @apiSuccess {String} alertDescription Alert description of tracking
@@ -426,7 +326,7 @@ router.post("/tracking", function(req,res)
     {
         if (data == null)
         {
-          res.json(500,{"message":"mmmm ... something went wrong :("});
+          res.status(500).json({"message":"mmmm ... something went wrong :("});
         }
         else
         {
@@ -434,10 +334,11 @@ router.post("/tracking", function(req,res)
           if(data && data.insertId)
           {
               res.json(200,{"message":data.insertId});
+              res.status(200).json({"message":data.insertId});
           }
           else
           {
-             res.json(500,{"message":"mmmm ... something went wrong :("});
+            res.status(500).json({"message":"mmmm ... something went wrong :("});
           }
         }
     });
@@ -451,27 +352,25 @@ router.delete("/tracking/", function(req, res)
     // id del tracking a eliminar
     var id = req.param('id');
 
-    TrackingModel.deleteTracking(id,function(error, data) {
-        if (data == null) {
-          res.render("errorAPI",{
-              title : "Kyros API REST",
-              message : "mmmm ... something went wrong :(" + " .... " +  error
-          });
-        } else {
-            if(data && data.message === "deleted" || data.message === "notExist") {
-              //res.redirect("/webkyrosapi/vertex/");
-              res.render("success",{
-                  title : "Kyros API REST",
-                  message : "Tracking deleted!"
-              });
-            } else {
-                res.render("errorAPI",{
-                    title : "Kyros API REST",
-                    message : "mmmm ... something went wrong :("
-                });
+    TrackingModel.deleteTracking(id,function(error, data)
+    {
+          if (data == null)
+          {
+            res.status(500).json({"message":"mmmm ... something went wrong :("})
+          }
+          else
+          {
+              if(data && data.message === "deleted" || data.message === "notExist")
+              {
+                res.status(200).json({"message":"UXO " + req.params.id + "deleted"})
               }
-        }
-    });
-})
+              else
+              {
+                res.status(500).json({"message":"mmmm ... something went wrong :("})
+              }
+          }
+      });
+
+  });
 
 module.exports = router;
